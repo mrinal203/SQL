@@ -1,0 +1,154 @@
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT ENAME ,JOB ,SAL
+  2  FROM EMP
+  3* WHERE SAL*12 NOT IN( 50000)
+SQL> /
+
+ENAME      JOB              SAL
+---------- --------- ----------
+SMITH      CLERK            800
+ALLEN      SALESMAN        1600
+WARD       SALESMAN        1250
+JONES      MANAGER         2975
+MARTIN     SALESMAN        1250
+BLAKE      MANAGER         2850
+CLARK      MANAGER         2450
+SCOTT      ANALYST         3000
+KING       PRESIDENT       5000
+TURNER     SALESMAN        1500
+ADAMS      CLERK           1100
+JAMES      CLERK            950
+FORD       ANALYST         3000
+MILLER     CLERK           1300
+
+14 rows selected.
+
+SQL> SELECT ENAME 
+  2  FROM EMP
+  3  WHERE SUBSTR(ENAM ,1,1) = 'A' AND SUBSTR(ENAME ,1,1) = 'S';
+WHERE SUBSTR(ENAM ,1,1) = 'A' AND SUBSTR(ENAME ,1,1) = 'S'
+             *
+ERROR at line 3:
+ORA-00904: "ENAM": invalid identifier
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT ENAME
+  2  FROM EMP
+  3* WHERE SUBSTR(ENAM ,1,1) = 'A' OR SUBSTR(ENAME ,1,1) = 'S'
+SQL> /
+WHERE SUBSTR(ENAM ,1,1) = 'A' OR SUBSTR(ENAME ,1,1) = 'S'
+             *
+ERROR at line 3:
+ORA-00904: "ENAM": invalid identifier
+
+
+SQL> ES
+SP2-0042: unknown command "ES" - rest of line ignored.
+SQL> SELECT ENAME
+  2  FROM EMP
+  3  WHERE SUBSTR(ENAM ,1,1) = 'A' OR SUBSTR(ENAME ,1,1) = 'S'
+  4  
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT ENAME
+  2  FROM EMP
+  3* WHERE SUBSTR(ENAME ,1,1) = 'A' OR SUBSTR(ENAME ,1,1) = 'S'
+SQL> /
+
+ENAME
+----------
+SMITH
+ALLEN
+SCOTT
+ADAMS
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT *
+  2  FROM EMP
+  3* WHERE SUBSTR(ENAME ,1,1) = 'A' OR SUBSTR(ENAME ,1,1) = 'S'
+SQL> /
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL     
+---------- ---------- --------- ---------- --------- ---------- ----
+      7369 SMITH      CLERK           7902 17-DEC-80        800         
+      7499 ALLEN      SALESMAN        7698 20-FEB-81       1600     
+      7788 SCOTT      ANALYST         7566 19-APR-87       3000         
+      7876 ADAMS      CLERK           7788 23-MAY-87       1100         
+
+SQL> SELECT COUNT(*)
+  2  FROM EMP
+  3  WHERE SAL>1600 AND JOB NOT IN
+  4  (SELECT DEPTNO
+  5  FROM EMP
+  6  WHERE JOB ='MANAGER'
+  7  GROUP BY DEPTNO);
+WHERE SAL>1600 AND JOB NOT IN
+                   *
+ERROR at line 3:
+ORA-01722: invalid number
+
+
+SQL> DE
+SP2-0042: unknown command "DE" - rest of line ignored.
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT COUNT(*)
+  2  FROM EMP
+  3  WHERE SAL>1600 AND JOB NOT IN
+  4  (SELECT DEPTNO
+  5  FROM EMP
+  6  WHERE JOB ='MANAGER'
+  7* GROUP BY DEPTNO)
+SQL> 
+SQL> /
+WHERE SAL>1600 AND JOB NOT IN
+                   *
+ERROR at line 3:
+ORA-01722: invalid number
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT COUNT(*)
+  2  FROM EMP
+  3  WHERE SAL>1600 AND JOB NOT IN ALL
+  4  (SELECT DEPTNO
+  5  FROM EMP
+  6  WHERE JOB ='MANAGER'
+  7* GROUP BY DEPTNO)
+SQL> /
+WHERE SAL>1600 AND JOB NOT IN ALL
+                              *
+ERROR at line 3:
+ORA-00936: missing expression
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT COUNT(*)
+  2  FROM EMP
+  3  WHERE SAL>1600 AND JOB = ALL
+  4  (SELECT DEPTNO
+  5  FROM EMP
+  6  WHERE JOB ='MANAGER'
+  7* GROUP BY DEPTNO)
+SQL> /
+WHERE SAL>1600 AND JOB = ALL
+                   *
+ERROR at line 3:
+ORA-01722: invalid number
+
+
+SQL> 
